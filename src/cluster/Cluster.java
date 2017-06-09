@@ -38,7 +38,9 @@ public class Cluster extends Application {
     private final String green_background = "-fx-background-color: #a5ea8a;";
     Slider centroid_slider = new Slider(1, 10, initial_k);  
     Slider data_slider = new Slider(1, 100, initial_data_points);  
-    
+    Button btnAC = new Button();
+    Button btnMV = new Button();
+        
     Label cost = new Label();
     BorderPane borderPane = new BorderPane();
     
@@ -96,6 +98,8 @@ public class Cluster extends Application {
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
         updateCost();
+        btnAC.setDisable(false);
+        btnMV.setDisable(true);
     }
     
     private void resetCentroids() {
@@ -117,8 +121,6 @@ public class Cluster extends Application {
     
     private BorderPane getButtonPane() {
         BorderPane buttonPane = new BorderPane();
-        Button btnAC = new Button();
-        Button btnMV = new Button();
         Button btnReset = new Button();
         
         btnMV.setDisable(true);
@@ -150,8 +152,6 @@ public class Cluster extends Application {
             @Override
             public void handle(ActionEvent event) {
                 reset();
-                btnAC.setDisable(false);
-                btnMV.setDisable(true);
             }
         });
         

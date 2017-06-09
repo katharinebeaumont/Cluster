@@ -8,6 +8,7 @@ package cluster.view;
 import cluster.calculations.Coordinate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -27,7 +28,7 @@ public class KMeansGraph {
         this.y_bounds = y_bounds;
     }
     
-    public ScatterChart drawGraph(HashMap<Integer, ArrayList<Coordinate>> data_points, ArrayList<Coordinate> centroids) {
+    public ScatterChart drawGraph(HashMap<Integer, ArrayList<Coordinate>> data_points, HashMap<Integer, Coordinate> centroids) {
 
         final NumberAxis xAxis = new NumberAxis(-0.5, x_bounds+0.5, 0.5);
         final NumberAxis yAxis = new NumberAxis(-0.5, y_bounds+0.5, 0.5);        
@@ -41,8 +42,10 @@ public class KMeansGraph {
         int centroid_size = data_points.keySet().size();
         
         XYChart.Series centroid_series = new XYChart.Series();
-        for (Coordinate centroid: centroids) {
-            XYChart.Data data = new XYChart.Data(centroid.getX(), centroid.getY(), (1+centroids.indexOf(centroid)));
+        Set<Integer> centroid_keys = centroids.keySet();
+        for (Integer centroid_key: centroid_keys) {
+            Coordinate centroid = centroids.get(centroid_key);
+            XYChart.Data data = new XYChart.Data(centroid.getX(), centroid.getY(), (1+centroid_key));
             centroid_series.getData().add(data);
         }
         centroid_series.setName("Centroids");

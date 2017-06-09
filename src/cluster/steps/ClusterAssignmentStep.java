@@ -7,6 +7,7 @@ import cluster.calculations.Coordinate;
 import cluster.calculations.EuclideanDistance;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  *
@@ -15,27 +16,27 @@ import java.util.HashMap;
  */
 public class ClusterAssignmentStep {
     
-    public static HashMap<Integer, ArrayList<Coordinate>> assignCluster(ArrayList<Coordinate> data_points, ArrayList<Coordinate> centroids) {
+    public static HashMap<Integer, ArrayList<Coordinate>> assignCluster(ArrayList<Coordinate> data_points, HashMap<Integer, Coordinate> centroids) {
         //This is what you need to return.
         HashMap<Integer, ArrayList<Coordinate>> cluster_assignment = new HashMap();
         
         //Use EuclideanDistance to work out the distances between a data point, and the centroids.
         //You need to assign a data point to the index of the centroid it is closest to.
         //Think: what if a data point is equidistant to n centroids?
+        int number_centroids = centroids.size();
         
         data_points.forEach((dp) -> {
             int closest_centroid = 0;
-            int number_centroids = centroids.size();
-            if (centroids.size() < 1) {
+            if (number_centroids < 1) {
                 closest_centroid = 0;
             } else {
-                Coordinate first_centroid = centroids.get(0); 
-                double shortest_distance = EuclideanDistance.calculate(dp, first_centroid);
-                for (int i=0; i<centroids.size(); i++) {
-                    double distance = EuclideanDistance.calculate(dp, centroids.get(i));
+                double shortest_distance = 100;
+                Set<Integer> centroid_keys = centroids.keySet();
+                for (Integer centroid_key: centroid_keys) {
+                    double distance = EuclideanDistance.calculate(dp, centroids.get(centroid_key));
                     if (distance < shortest_distance) {
                         shortest_distance = distance;
-                        closest_centroid = i;
+                        closest_centroid = centroid_key;
                     }
                 }
             }

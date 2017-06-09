@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class DataController {
     
     ArrayList<Coordinate> data_points;
-    ArrayList<Coordinate> centroids;
+    HashMap<Integer, Coordinate> centroids;
     HashMap<Integer, ArrayList<Coordinate>> centroid_index_to_data_points;
     
     private final int x_bounds;
@@ -37,7 +37,7 @@ public class DataController {
         return data_points;
     }
     
-    public ArrayList getCentroids() {
+    public HashMap<Integer, Coordinate> getCentroids() {
         return centroids;
     }
     
@@ -58,7 +58,7 @@ public class DataController {
         return centroid_index_to_data_points;
     }
 
-    public ArrayList moveCentroids() {
+    public HashMap<Integer, Coordinate> moveCentroids() {
         centroids = MoveCentroidStep.moveCentroids(centroid_index_to_data_points);
         return centroids;
     }

@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class ClusterAssignmentStepTest {
     
-    ArrayList<Coordinate> centroids;
+    HashMap<Integer, Coordinate> centroids;
     Coordinate centroid_1 = new Coordinate(0,0);
     Coordinate centroid_2 = new Coordinate(4,4);
     Coordinate centroid_3 = new Coordinate(2,1);
@@ -29,9 +29,9 @@ public class ClusterAssignmentStepTest {
     
     @Before
     public void setUp() {
-        centroids = new ArrayList();
-        centroids.add(centroid_1);
-        centroids.add(centroid_2);
+        centroids = new HashMap();
+        centroids.put(0, centroid_1);
+        centroids.put(1, centroid_2);
     }
     
 
@@ -49,9 +49,9 @@ public class ClusterAssignmentStepTest {
         
         HashMap<Integer, ArrayList<Coordinate>> result = ClusterAssignmentStep.assignCluster(data_points, centroids);
         assertEquals(2, result.keySet().size());
-        ArrayList resultsForFirstKey = result.get(centroids.indexOf(centroid_1));
+        ArrayList resultsForFirstKey = result.get(0);
         assertTrue(resultsForFirstKey.contains(dp_1) && resultsForFirstKey.size() == 1);
-        ArrayList resultsForSecondKey = result.get(centroids.indexOf(centroid_2));
+        ArrayList resultsForSecondKey = result.get(1);
         assertTrue(resultsForSecondKey.contains(dp_2) && resultsForSecondKey.size() == 1);
     }
     
@@ -85,7 +85,7 @@ public class ClusterAssignmentStepTest {
         data_points.add(dp_10);
         
         HashMap<Integer, ArrayList<Coordinate>> result = ClusterAssignmentStep.assignCluster(data_points, centroids);
-        ArrayList<Coordinate> results_for_first_centroid = result.get(centroids.indexOf(centroid_1));
+        ArrayList<Coordinate> results_for_first_centroid = result.get(0);
         assertEquals(5, results_for_first_centroid.size());
         assertTrue(results_for_first_centroid.contains(dp_1));
         assertTrue(results_for_first_centroid.contains(dp_3));
@@ -93,7 +93,7 @@ public class ClusterAssignmentStepTest {
         assertTrue(results_for_first_centroid.contains(dp_5));
         assertTrue(results_for_first_centroid.contains(dp_6));
         
-        ArrayList<Coordinate> results_for_second_centroid = result.get(centroids.indexOf(centroid_2));
+        ArrayList<Coordinate> results_for_second_centroid = result.get(1);
         assertEquals(5, results_for_second_centroid.size());
         
         assertTrue(results_for_second_centroid.contains(dp_2));
@@ -114,7 +114,7 @@ public class ClusterAssignmentStepTest {
         ArrayList<Coordinate> data_points = new ArrayList();
         data_points.add(dp);
         HashMap<Integer, ArrayList<Coordinate>> result = ClusterAssignmentStep.assignCluster(data_points, centroids);
-        ArrayList<Coordinate> results_for_first_centroid = result.get(centroids.indexOf(centroid_1));
+        ArrayList<Coordinate> results_for_first_centroid = result.get(0);
         assertEquals(1, result.keySet().size());
         assertEquals(1, results_for_first_centroid.size());
         assertTrue(results_for_first_centroid.contains(dp));
@@ -122,7 +122,7 @@ public class ClusterAssignmentStepTest {
     
     @Test
     public void testMultipleCentroids() {
-        centroids.add(centroid_3);
+        centroids.put(2, centroid_3);
         
         Coordinate dp_1 = new Coordinate(1,0);
         Coordinate dp_2 = new Coordinate(4,2);
@@ -141,17 +141,17 @@ public class ClusterAssignmentStepTest {
         
         HashMap<Integer, ArrayList<Coordinate>> result = ClusterAssignmentStep.assignCluster(data_points, centroids);
         assertEquals(3, result.keySet().size());
-        ArrayList<Coordinate> results_for_first_centroid = result.get(centroids.indexOf(centroid_1));
+        ArrayList<Coordinate> results_for_first_centroid = result.get(0);
         assertEquals(2, results_for_first_centroid.size());
         assertTrue(results_for_first_centroid.contains(dp_1));
         assertTrue(results_for_first_centroid.contains(dp_4));
         
-        ArrayList<Coordinate> results_for_second_centroid = result.get(centroids.indexOf(centroid_2));
+        ArrayList<Coordinate> results_for_second_centroid = result.get(1);
         assertEquals(2, results_for_second_centroid.size());
         assertTrue(results_for_second_centroid.contains(dp_6));
         assertTrue(results_for_second_centroid.contains(dp_2));
         
-        ArrayList<Coordinate> results_for_third_centroid = result.get(centroids.indexOf(centroid_3));
+        ArrayList<Coordinate> results_for_third_centroid = result.get(2);
         assertEquals(2, results_for_third_centroid.size());
         assertTrue(results_for_third_centroid.contains(dp_3));
         assertTrue(results_for_third_centroid.contains(dp_5));
@@ -159,7 +159,7 @@ public class ClusterAssignmentStepTest {
     
     @Test
     public void testLooseCentroidWhenNoDataPoints() {
-        centroids.add(centroid_3);
+        centroids.put(2, centroid_3);
         
         Coordinate dp_1 = new Coordinate(1,0);
         Coordinate dp_2 = new Coordinate(4,4);
@@ -170,8 +170,8 @@ public class ClusterAssignmentStepTest {
         
         HashMap<Integer, ArrayList<Coordinate>> result = ClusterAssignmentStep.assignCluster(data_points, centroids);
         assertEquals(2, result.keySet().size());
-        assertTrue(result.keySet().contains(centroids.indexOf(centroid_1)));
-        assertTrue(result.keySet().contains(centroids.indexOf(centroid_2)));
-        assertFalse(result.keySet().contains(centroids.indexOf(centroid_3)));
+        assertTrue(result.keySet().contains(0));
+        assertTrue(result.keySet().contains(1));
+        assertFalse(result.keySet().contains(2));
     }
 }

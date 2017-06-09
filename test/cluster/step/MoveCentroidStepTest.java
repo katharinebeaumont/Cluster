@@ -67,10 +67,10 @@ public class MoveCentroidStepTest {
         Coordinate new_centroid_1 = new Coordinate(1,1);
         Coordinate new_centroid_2 = new Coordinate(5,5);
         
-        ArrayList<Coordinate> result = MoveCentroidStep.moveCentroids(data_to_centroid);
+        HashMap<Integer, Coordinate> result = MoveCentroidStep.moveCentroids(data_to_centroid);
         assertEquals(2, result.size());
-        assertTrue(result.contains(new_centroid_1));
-        assertTrue(result.contains(new_centroid_2));
+        assertEquals(new_centroid_1, result.get(0));
+        assertEquals(new_centroid_2, result.get(1));
     }
     
 }
