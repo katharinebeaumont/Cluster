@@ -4,6 +4,7 @@
 package cluster.controller;
 
 import cluster.calculations.Coordinate;
+import cluster.calculations.Cost;
 import cluster.data.DataPointInitialiser;
 import cluster.steps.ClusterAssignmentStep;
 import cluster.steps.MoveCentroidStep;
@@ -66,5 +67,9 @@ public class DataController {
         intialiseCentroids(k);
         centroid_index_to_data_points = new HashMap(); 
         centroid_index_to_data_points.put(0, data_points);
+    }
+    
+    public double getCost() {
+        return Cost.calculate(centroid_index_to_data_points, centroids);
     }
 }

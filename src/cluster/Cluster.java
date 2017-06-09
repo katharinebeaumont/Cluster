@@ -2,6 +2,7 @@ package cluster;
 
 import cluster.controller.DataController;
 import cluster.view.KMeansGraph;
+import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,10 +15,12 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 /**
@@ -32,9 +35,11 @@ public class Cluster extends Application {
     private final int y_bounds = 10;
     private final int initial_k = 5;
     private final int initial_data_points = 30;
+    private final String green_background = "-fx-background-color: #a5ea8a;";
     Slider centroid_slider = new Slider(1, 10, initial_k);  
     Slider data_slider = new Slider(1, 100, initial_data_points);  
     
+    Label cost = new Label();
     BorderPane borderPane = new BorderPane();
     
     DataController controller;
@@ -42,7 +47,7 @@ public class Cluster extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        FlowPane buttonPane = getButtonPane();
+        BorderPane buttonPane = getButtonPane();
         
         borderPane.setTop(buttonPane);
         
@@ -68,6 +73,7 @@ public class Cluster extends Application {
         controller.assignClusters();
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
+        updateCost();
     }
     
     private void moveCentroid() {
@@ -77,6 +83,7 @@ public class Cluster extends Application {
         controller.moveCentroids();
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
+        updateCost();
     }
     
     private void reset() {
@@ -88,6 +95,7 @@ public class Cluster extends Application {
         KMeansGraph kmg = new KMeansGraph(x_bounds,y_bounds);
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
+        updateCost();
     }
     
     private void resetCentroids() {
@@ -98,11 +106,17 @@ public class Cluster extends Application {
         KMeansGraph kmg = new KMeansGraph(x_bounds,y_bounds);
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
+        updateCost();
     }
     
+    private void updateCost() {
+        double cost_of_k_means = controller.getCost();
+        cost.setStyle(green_background);
+        cost.setText("Cost: " + String.format("%.4f", cost_of_k_means));
+    }
     
-    
-    private FlowPane getButtonPane() {
+    private BorderPane getButtonPane() {
+        BorderPane buttonPane = new BorderPane();
         Button btnAC = new Button();
         Button btnMV = new Button();
         Button btnReset = new Button();
@@ -141,11 +155,11 @@ public class Cluster extends Application {
             }
         });
         
+        
         centroid_slider.setShowTickLabels(true);
         centroid_slider.setShowTickMarks(true);
         centroid_slider.setMajorTickUnit(1);
         centroid_slider.setMinorTickCount(1);
-        
         
         final Label centroid_label = new Label(
         Double.toString(centroid_slider.getValue()));
@@ -194,15 +208,34 @@ public class Cluster extends Application {
         flowSliders.setHgap(4);
         flowSliders.getChildren().addAll(hboxCentroid, hboxData);
         
-        
         FlowPane flowMain = new FlowPane(Orientation.VERTICAL);
         flowMain.setPadding(new Insets(5, 5, 5, 5));
         flowMain.setVgap(4);
         flowMain.setHgap(4);
         flowMain.getChildren().addAll(flowButtons, flowSliders);
         flowMain.setMaxHeight(150);
+ 
+        buttonPane.setCenter(flowMain);
         
-        return flowMain;
+        BorderPane costPane = new BorderPane();
+        HBox boxCost = new HBox();
+        boxCost.setPadding(new Insets(5, 5, 5, 5));
+        boxCost.getChildren().addAll(cost);
+        
+        HBox boxCostImg = new HBox();
+        boxCostImg.setPadding(new Insets(5, 5, 5, 5));
+        
+        String path = "/resources/cost.png";
+        ImagePattern costImg = new ImagePattern(new Image(path));
+        Rectangle r = new Rectangle(170,70);
+        r.setFill(costImg);
+        boxCostImg.getChildren().addAll(r);
+        costPane.setTop(boxCostImg);
+        costPane.setCenter(boxCost);
+        
+        buttonPane.setRight(costPane);
+        buttonPane.setStyle(green_background);
+        return buttonPane;
     }
     
 }
