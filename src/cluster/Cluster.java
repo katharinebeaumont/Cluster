@@ -2,6 +2,8 @@ package cluster;
 
 import cluster.controller.DataController;
 import cluster.view.KMeansGraph;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -22,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -35,11 +38,15 @@ public class Cluster extends Application {
     private final int y_bounds = 10;
     private final int initial_k = 5;
     private final int initial_data_points = 30;
+    
+    private final long ANIMATION_INTERVAL = 500;
+    
     private final String green_background = "-fx-background-color: #a5ea8a;";
     Slider centroid_slider = new Slider(1, 10, initial_k);  
     Slider data_slider = new Slider(1, 100, initial_data_points);  
     Button btnAC = new Button();
     Button btnMV = new Button();
+    Button btnShowMe = new Button();
         
     Label cost = new Label();
     BorderPane borderPane = new BorderPane();
@@ -100,6 +107,7 @@ public class Cluster extends Application {
         updateCost();
         btnAC.setDisable(false);
         btnMV.setDisable(true);
+        btnShowMe.setDisable(false);
     }
     
     private void resetCentroids() {
@@ -113,6 +121,38 @@ public class Cluster extends Application {
         updateCost();
     }
     
+    private void automate() throws InterruptedException {
+        long timeMillis = 500;
+        assignClusters();
+        System.out.println("*Animating the graph*");
+        animateGraph(timeMillis); 
+    }
+
+    private void animateGraph(long timeMillis) {
+        Timeline beat = new Timeline(
+            new KeyFrame(Duration.millis(timeMillis),         event -> animationStep(timeMillis))
+        );
+        beat.setAutoReverse(true);
+        beat.setCycleCount(1);
+        beat.play();
+    }
+    
+    private void animationStep(long timeMillis) {
+        double lowestCost = controller.getCost();
+        System.out.println("Animating at " + timeMillis + ", cost is " + lowestCost);
+        
+        moveCentroid();
+        assignClusters();
+        double cost_after_steps = controller.getCost();
+        System.out.println("Worked out cost as " + cost_after_steps);
+        if (cost_after_steps == lowestCost) {
+            System.out.println("Converged!");
+        } else {
+            System.out.println("Haven't converged yet.");
+            animateGraph(timeMillis+ANIMATION_INTERVAL);
+        }
+    }
+    
     private void updateCost() {
         double cost_of_k_means = controller.getCost();
         cost.setStyle(green_background);
@@ -123,8 +163,24 @@ public class Cluster extends Application {
         BorderPane buttonPane = new BorderPane();
         Button btnReset = new Button();
         
+        btnShowMe.setText("Show me");
+        btnShowMe.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    automate();
+                } catch (InterruptedException ie) {
+                    System.out.println(ie);
+                }
+                btnAC.setDisable(false);
+                btnMV.setDisable(true);
+                btnShowMe.setDisable(true);
+            }
+        });
+         
         btnMV.setDisable(true);
-        btnAC.setText("Assign Clusters");
+        btnAC.setText("Assign clusters");
         btnAC.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
@@ -155,11 +211,11 @@ public class Cluster extends Application {
             }
         });
         
-        
         centroid_slider.setShowTickLabels(true);
         centroid_slider.setShowTickMarks(true);
         centroid_slider.setMajorTickUnit(1);
         centroid_slider.setMinorTickCount(1);
+        centroid_slider.setSnapToTicks(true);
         
         final Label centroid_label = new Label(
         Double.toString(centroid_slider.getValue()));
@@ -200,7 +256,7 @@ public class Cluster extends Application {
         flowButtons.setPadding(new Insets(5, 5, 5, 5));
         flowButtons.setVgap(4);
         flowButtons.setHgap(4);
-        flowButtons.getChildren().addAll(btnAC, btnMV, btnReset);
+        flowButtons.getChildren().addAll(btnAC, btnMV, btnShowMe, btnReset);
         
         FlowPane flowSliders = new FlowPane(Orientation.HORIZONTAL);
         flowSliders.setPadding(new Insets(5, 5, 5, 5));
