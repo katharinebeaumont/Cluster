@@ -104,7 +104,7 @@ public class Cluster extends Application {
         KMeansGraph kmg = new KMeansGraph(x_bounds,y_bounds);
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
-        updateCost();
+        cost.setText("");
         btnAC.setDisable(false);
         btnMV.setDisable(true);
         btnShowMe.setDisable(false);
