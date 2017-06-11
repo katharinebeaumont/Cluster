@@ -28,6 +28,7 @@ public class DataPointInitialiser {
         //Randomly allocate a data point to a mock cluster centroid, and then vary its
         // proximity based on a 'variance' (which is determined by the number of clusters
         // and another random element) and then (again) a random element.
+        System.out.println("Generating mock centroids for data point distribution.");
         HashMap<Integer, Coordinate> mock_centroids = generateCentroids(k, x_range, y_range);
         double x_variance = (x_range/k * (15*Math.random()));
         double y_variance = (y_range/k * (15*Math.random()));
@@ -57,12 +58,12 @@ public class DataPointInitialiser {
     }
 
     public static HashMap<Integer, Coordinate> generateCentroids(int k, int x_range, int y_range) {
+        System.out.println("Generating " + k + " centroids.");
         HashMap<Integer, Coordinate> centroids = new HashMap();
         for (int i=0; i<k; i++) {
             double x = Math.random() * x_range;
             double y = Math.random() * y_range;
             Coordinate centroid = new Coordinate(x,y);
-            System.out.println("Generated centroid: " + centroid);
             centroids.put(i, centroid);
         }
         return centroids;

@@ -36,7 +36,7 @@ public class KMeansGraph {
             ScatterChart<Number,Number>(xAxis,yAxis);
         xAxis.setLabel("X");                
         yAxis.setLabel("Y");
-        
+        sc.setPrefSize(400, 450);
         //Draw the data points nested under centroids, using a different
         // series per centroid so they display differently
         int centroid_size = data_points.keySet().size();

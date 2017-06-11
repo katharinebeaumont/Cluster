@@ -17,6 +17,8 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -42,7 +44,9 @@ public class Cluster extends Application {
     private final long ANIMATION_INTERVAL = 500;
     
     private final String green_background = "-fx-background-color: #a5ea8a;";
-    Slider centroid_slider = new Slider(1, 10, initial_k);  
+    
+    private final SpinnerValueFactory.IntegerSpinnerValueFactory centroid_spinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, initial_k);
+
     Slider data_slider = new Slider(1, 100, initial_data_points);  
     Button btnAC = new Button();
     Button btnMV = new Button();
@@ -98,7 +102,7 @@ public class Cluster extends Application {
     private void reset() {
         Node centre = borderPane.getCenter();
         borderPane.getChildren().remove(centre);
-        int k = (int)centroid_slider.getValue();
+        int k = (int)centroid_spinner.getValue();
         int data_points = (int)data_slider.getValue();
         controller = new DataController(x_bounds,y_bounds, k, data_points);
         KMeansGraph kmg = new KMeansGraph(x_bounds,y_bounds);
@@ -113,12 +117,13 @@ public class Cluster extends Application {
     private void resetCentroids() {
         Node centre = borderPane.getCenter();
         borderPane.getChildren().remove(centre);
-        int k = (int)centroid_slider.getValue();
+        int k = (int)centroid_spinner.getValue();
         controller.resetCentroids(k);
         KMeansGraph kmg = new KMeansGraph(x_bounds,y_bounds);
         ScatterChart sc = kmg.drawGraph(controller.getCentroidToDataPoint(), controller.getCentroids());
         borderPane.setCenter(sc);
-        updateCost();
+        cost.setText("");
+        btnShowMe.setDisable(false);
     }
     
     private void automate() throws InterruptedException {
@@ -146,7 +151,7 @@ public class Cluster extends Application {
         double cost_after_steps = controller.getCost();
         System.out.println("Worked out cost as " + cost_after_steps);
         if (cost_after_steps == lowestCost) {
-            System.out.println("Converged!");
+            System.out.println("*Converged!*");
         } else {
             System.out.println("Haven't converged yet.");
             animateGraph(timeMillis+ANIMATION_INTERVAL);
@@ -191,7 +196,7 @@ public class Cluster extends Application {
             }
         });
         
-        btnMV.setText("Move centroid");
+        btnMV.setText("Move centroids");
         btnMV.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
@@ -211,34 +216,26 @@ public class Cluster extends Application {
             }
         });
         
-        centroid_slider.setShowTickLabels(true);
-        centroid_slider.setShowTickMarks(true);
-        centroid_slider.setMajorTickUnit(1);
-        centroid_slider.setMinorTickCount(1);
-        centroid_slider.setSnapToTicks(true);
-        
-        final Label centroid_label = new Label(
-        Double.toString(centroid_slider.getValue()));
-                
-        centroid_slider.valueProperty().addListener((
+        centroid_spinner.valueProperty().addListener((
             ObservableValue<? extends Number> ov, 
             Number old_val, Number new_val) -> {
-                centroid_label.setText(String.format("%d", new_val.intValue()));
                 resetCentroids();
         });
         
         final Label centroid_desc = new Label("Initial number of centroids");
         HBox hboxCentroid = new HBox();
-        hboxCentroid.setPadding(new Insets(2, 2, 2, 2));
-        hboxCentroid.getChildren().addAll(centroid_label, centroid_slider, centroid_desc);
+        hboxCentroid.setPadding(new Insets(2, 5, 2, 5));
+        Spinner centroidSpinner = new Spinner(centroid_spinner);
+        centroidSpinner.setMaxWidth(100);
+        hboxCentroid.getChildren().addAll(centroidSpinner, centroid_desc);
         
         data_slider.setShowTickLabels(true);
         data_slider.setShowTickMarks(true);
         data_slider.setMajorTickUnit(20);
         data_slider.setMinorTickCount(20);
         
-        final Label data_label = new Label(
-        Double.toString(data_slider.getValue()));
+        final Label data_label = new Label();
+        data_label.setText(String.format("%d", initial_data_points));
         
         data_slider.valueProperty().addListener((
             ObservableValue<? extends Number> ov, 
@@ -249,7 +246,7 @@ public class Cluster extends Application {
         final Label data_desc = new Label("Number of data points");
                 
         HBox hboxData = new HBox();
-        hboxData.setPadding(new Insets(2, 2, 2, 2));
+        hboxData.setPadding(new Insets(2, 5, 2, 5));
         hboxData.getChildren().addAll(data_label, data_slider, data_desc);
         
         FlowPane flowButtons = new FlowPane(Orientation.HORIZONTAL);
