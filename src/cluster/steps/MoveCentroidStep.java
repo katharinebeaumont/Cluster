@@ -7,7 +7,6 @@ package cluster.steps;
 import cluster.calculations.Coordinate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  *

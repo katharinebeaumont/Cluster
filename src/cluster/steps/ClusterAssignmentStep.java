@@ -7,7 +7,6 @@ import cluster.calculations.Coordinate;
 import cluster.calculations.EuclideanDistance;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  *
