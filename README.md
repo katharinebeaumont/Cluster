@@ -19,11 +19,11 @@ What are the considerations?
 
 ## Get started
 
-You will need: [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and preferably, [Netbeans](https://netbeans.org/) which has support for JavaFX projects and Ant.
+You will need: [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). This project uses Gradle as a build system, but an appropriate distribution will be downloaded by the Gradle wrapper automatically, so you don't need to have Gradle pre-installed.
 
-Either build the jar using build.xml, then run `java -jar dist/Cluster.jar` or (in an IDE) run the project from src/cluster/Cluster.java.
+Either build the project using gradlew (on linux) or gradlew.bat (on Windows), then run `java -jar build/libs/Cluster.jar` or (in an IDE) run the project from src/main/java/cluster/Cluster.java.
 
-Go to src/cluster/steps. 
+Go to src/main/java/cluster/steps. 
 
 1. You need to complete the code in ClusterAssignmentStep.java and MoveCentroidStep.java.
 
