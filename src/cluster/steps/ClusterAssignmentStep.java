@@ -28,6 +28,7 @@ public class ClusterAssignmentStep {
         //Use EuclideanDistance to work out the distances between a data point, and the centroids.
         //You need to assign a data point to the index of the centroid it is closest to.
         //Think: what if a data point is equidistant to n centroids?
+        // NB: If a centroid has no data points, it should be removed.
         
         //DONE? Check ClusterAssignmentStepTest.java
         
