@@ -2,8 +2,6 @@
 
 Implement the K-Means algorithm to cluster 2 dimensional data points.
 
-The basics: [see this blog](https://home.deib.polimi.it/matteucc/Clustering/tutorial_html/kmeans.html).
-
 ## How does the K-Means algorithm work?
 
 We have an unlabelled data set, and we’d like to have an algorithm that automatically groups the data into subsets. 
@@ -32,6 +30,10 @@ Go to src/cluster/steps.
 2. Tweet a screenshot of: 
  - your lowest cost value, and/or
  - a sentence on what unsupervised learning is
+ 
+## I want to know more
+
+The basics: [see this blog](https://home.deib.polimi.it/matteucc/Clustering/tutorial_html/kmeans.html).
 
 ## Problems, bugs, feature requests, questions?
 
