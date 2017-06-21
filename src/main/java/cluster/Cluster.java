@@ -285,7 +285,7 @@ public class Cluster extends Application {
         HBox boxCostImg = new HBox();
         boxCostImg.setPadding(new Insets(5, 5, 5, 5));
         
-        String path = "/resources/cost.png";
+        String path = "/cost.png";
         ImagePattern costImg = new ImagePattern(new Image(path));
         Rectangle r = new Rectangle(170,70);
         r.setFill(costImg);
