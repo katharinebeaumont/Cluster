@@ -26,6 +26,8 @@ public class MoveCentroidStep {
         // This will form the new location for the centroid.
         // Things to consider: if a centroid has no data points, it should be removed.
         
+        //DONE? Check MoveCentroidStepTest.java 
+        
         return new_centroids;
     }
     

@@ -25,4 +25,14 @@ You will need: [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/
 
 Either build the jar using build.xml, then run `java -jar dist/Cluster.jar` or (in an IDE) run the project from src/cluster/Cluster.java.
 
-Go to src/cluster/steps. You need to complete the code in ClusterAssignmentStep.java and MoveCentroidStep.java.
+Go to src/cluster/steps. 
+
+1. You need to complete the code in ClusterAssignmentStep.java and MoveCentroidStep.java.
+
+2. Tweet a screenshot of: 
+ - your lowest cost value, and/or
+ - a sentence on what unsupervised learning is
+
+## Problems, bugs, feature requests, questions?
+
+Open an issue or DM me on [Twitter](https://twitter.com/katharineCodes) for my e-mail address.

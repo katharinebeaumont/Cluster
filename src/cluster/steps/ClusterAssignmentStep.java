@@ -23,6 +23,7 @@ public class ClusterAssignmentStep {
         //You need to assign a data point to the index of the centroid it is closest to.
         //Think: what if a data point is equidistant to n centroids?
         
+        //DONE? Check ClusterAssignmentStepTest.java
         
         return cluster_assignment;
     }
