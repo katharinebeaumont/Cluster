@@ -15,9 +15,13 @@ import java.util.HashMap;
  */
 public class MoveCentroidStep {
     
+    //HashMap<Integer, ArrayList<Coordinate>> centroid_index_to_data_points - this is the index of the centroid, to the data points closest to it
     public static HashMap<Integer, Coordinate> moveCentroids(HashMap<Integer, ArrayList<Coordinate>> centroid_index_to_data_points) {
         
         //This is what you need to return
+        // This is the index of the centroid, plus it's new location
+        // Hint - you don't need to know the old location of the centroid, but you need to keep the indexes
+        // the same
         HashMap<Integer, Coordinate> new_centroids = new HashMap();
         
         //For all the data points assigned to a centroid,
